@@ -52,7 +52,8 @@ class WsParam(object):
 
         signature_sha_base64 = base64.b64encode(signature_sha).decode(encoding='utf-8')
 
-        authorization_origin = f'api_key="{self.APIKey}", algorithm="hmac-sha256", headers="host date request-line", signature="{signature_sha_base64}"'
+        authorization_origin = f'api_key="{self.APIKey}", algorithm="hmac-sha256", headers="host date request-line", ' \
+                               f'signature="{signature_sha_base64}" '
 
         authorization = base64.b64encode(authorization_origin.encode('utf-8')).decode(encoding='utf-8')
 

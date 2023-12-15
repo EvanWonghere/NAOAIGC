@@ -6,7 +6,7 @@
 @Project: NAOAIGC
 @Description: 
 """
-
+import re
 
 import SparkApi
 import numpy as np
@@ -62,6 +62,7 @@ prompt = "想象一下，你正在帮助我与NAO机器人进行交互。" \
          "你准备好了吗？你是否清楚且明白？只需要回答是或否。" \
          "再次强调你的任务是生成解决任务的代码。" \
          "并且你的所有回答应该精要简短，尤其是当涉及到代码的时候。" \
+         "请注意不要使用未给出的函数！"
 
 
 dict_of_objects = {
@@ -79,6 +80,17 @@ dict_of_objects = {
 
 
 text = []
+
+
+def find_code_and_execute(s):
+    # 使用正则表达式找到代码块
+    code = re.findall(r'```python(.*?)```', s, re.DOTALL)
+
+    # 如果找到了代码块
+    if code:
+        # 执行每一个代码块
+        for block in code:
+            exec(block.strip())
 
 
 def get_text(role, content):
@@ -103,16 +115,10 @@ def check_len(text):
 
 
 def motionControl(task):
-    Input = prompt
+    Input = prompt + "接下来是我的指令，请完成你的任务，注意不要使用我未给出的函数：" + task
     question = check_len(get_text("user", Input))
     SparkApi.answer = ""
-    print("星火:", end="")
+    print("motionControl:\n星火:", end="")
     SparkApi.main(app_id, api_key, api_secret, Spark_url, domain, question)
     get_text("assistant", SparkApi.answer)
-
-    Input = task
-    question = check_len(get_text("user", Input))
-    SparkApi.answer = ""
-    print("星火:", end="")
-    SparkApi.main(app_id, api_key, api_secret, Spark_url, domain, question)
-    get_text("assistant", SparkApi.answer)
+    # find_code_and_execute(Spar
