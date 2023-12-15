@@ -1,2 +1,2 @@
 # NAOAIGC
-## Use ChatGPT to solve NAO robot tasks.
+## Using ChatGPT to solve NAO robot tasks.
